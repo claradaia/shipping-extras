@@ -62,15 +62,20 @@ function shipping_extras_activate() {
             $VIP_capabilities
         );
 
+		// register that role was created by shipping-extras, so it can be removed upon deactivation
+		update_option( 'shipping_extras_VIP_role_created', true );
+
+		error_log('[shipping-extras] Created VIP customer role.');
     } else {
 		// expand existing VIP customer capabilities with "free shipping"
 		$VIP_customer = get_role( 'VIP_customer' );
 		$VIP_customer->add_cap('shipping_extras_free_shipping');
+
+		error_log('[shipping-extras] Added \'free shipping\' to existing VIP customer role.');
+
 	}
 
-	// add tag to VIP role, if it does exist, so that it does not get removed on deactivation
-
-	error_log('shipping-extras activated.');
+	error_log('[shipping-extras] Plugin activated.');
 }
 
 
@@ -88,11 +93,19 @@ function shipping_extras_deactivate() {
 		$user->set_role( 'customer' );
 	}
 
-	remove_role('VIP_customer');
+	if ( get_option( 'shipping_extras_VIP_role_created' )) {
+		// remove VIP role, if created only for the plugin
+		remove_role('VIP_customer');
+		delete_option('shipping_extras_VIP_role_created');
+		error_log('[shipping-extras] Removed VIP customer role.');
+	} else {
+		// remove "free shipping" capability from existing VIP customer role
+		$VIP_customer = get_role( 'VIP_customer' );
+		$VIP_customer->remove_cap('shipping_extras_free_shipping');
+		error_log('[shipping-extras] Removed \'free-shipping\' from VIP customer role.');
+	}
 
-	// remove VIP role, if created only for the plugin
-
-	error_log('shipping-extras deactivated.');
+	error_log('[shipping-extras] Plugin deactivated.');
 
 }
 
