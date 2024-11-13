@@ -48,7 +48,26 @@ function shipping_extras_activate() {
 		return;
 	}
 
-	// add VIP role, if it doesn't exist
+	if ( ! get_role( 'VIP_customer' ) ) {
+		// add VIP role, if it doesn't exist
+		$customer = get_role( 'customer' );
+		$VIP_capabilities = $customer->capabilities;
+
+		// VIP capabilities expand regular customer capabilities with "free shipping"
+		array_push($VIP_capabilities, 'shipping_extras_free_shipping');
+
+        add_role(
+            'VIP_customer',
+            'VIP Customer',
+            $VIP_capabilities
+        );
+
+    } else {
+		// expand existing VIP customer capabilities with "free shipping"
+		$VIP_customer = get_role( 'VIP_customer' );
+		$VIP_customer->add_cap('shipping_extras_free_shipping');
+	}
+
 	// add tag to VIP role, if it does exist, so that it does not get removed on deactivation
 
 	error_log('shipping-extras activated.');
@@ -63,6 +82,14 @@ register_deactivation_hook( __FILE__, 'shipping_extras_deactivate' );
  * @since 0.1.0
  */
 function shipping_extras_deactivate() {
+	// VIP customers become regular customers
+	$users = get_users( array( 'role' => 'VIP_customer' ) );
+	foreach ( $users as $user ) {
+		$user->set_role( 'customer' );
+	}
+
+	remove_role('VIP_customer');
+
 	// remove VIP role, if created only for the plugin
 
 	error_log('shipping-extras deactivated.');
