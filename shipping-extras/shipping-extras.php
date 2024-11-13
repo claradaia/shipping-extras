@@ -47,7 +47,29 @@ function shipping_extras_activate() {
 		add_action( 'admin_notices', 'shipping_extras_missing_wc_notice' );
 		return;
 	}
+
+	// add VIP role, if it doesn't exist
+	// add tag to VIP role, if it does exist, so that it does not get removed on deactivation
+
+	error_log('shipping-extras activated.');
 }
+
+
+register_deactivation_hook( __FILE__, 'shipping_extras_deactivate' );
+
+/**
+ * Deactivation hook.
+ *
+ * @since 0.1.0
+ */
+function shipping_extras_deactivate() {
+	// remove VIP role, if created only for the plugin
+
+	error_log('shipping-extras deactivated.');
+
+}
+
+
 
 if ( ! class_exists( 'shipping_extras' ) ) :
 	/**
