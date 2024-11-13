@@ -2,8 +2,8 @@
 /**
  * Plugin Name: Shipping Extras
  * Version: 0.1.0
- * Author: The WordPress Contributors
- * Author URI: https://woo.com
+ * Author: Clara Daia
+ * Author URI: https://github.com/claradaia
  * Text Domain: shipping-extras
  * Domain Path: /languages
  *
