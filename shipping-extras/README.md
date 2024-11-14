@@ -1,6 +1,6 @@
 # Shipping Extras
 
-A WooCommerce extension that adds custom discount rates for shipping according to the purchase subtotal, as well as free shipping for users with a "VIP" role.
+A WooCommerce extension that adds custom discount rates for shipping according to the purchase subtotal, as well as free shipping for users with a "VIP Customer" role.
 
 Inspired by [Create Woo Extension](https://github.com/woocommerce/woocommerce/blob/trunk/packages/js/create-woo-extension/README.md).
 
@@ -35,12 +35,12 @@ $ wp-env run cli bash ./wp-content/plugins/shipping-extras/load_sample.sh
 
 #### Shipping discounts
 
-- Access the pre populated store as John Doe
-- Add a few items to your cart
-- Go to checkout and check the shipping costs
+- Log in to the pre populated store as John Doe (username `jdoe`, password `jdoe`)
+- Add items to your cart
+- Go to checkout and check the shipping costs. Increase and decrease quantities to check discounts for each subtotal tier.
 
 #### VIP Customer shipping
 
-- Access the pre populated store as Victor Irving Parker
-- Add a few items to your cart
+- Log in to the pre populated store as Victor Irving Parker (username `viparker`, password `viparker`)
+- Add items to your cart
 - Go to checkout and check the shipping costs

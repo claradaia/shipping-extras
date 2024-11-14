@@ -1,7 +1,7 @@
 {
 	"name": "shipping-extras",
 	"version": "0.1.0",
-	"author": "The WordPress Contributors",
+	"author": "Clara Daia",
 	"license": "GPL-3.0+",
 	"main": "build/index.js",
 	"scripts": {
