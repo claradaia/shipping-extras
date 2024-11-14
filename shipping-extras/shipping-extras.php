@@ -130,6 +130,9 @@ if ( ! class_exists( 'shipping_extras' ) ) :
 			if ( is_admin() ) {
 				new Setup();
 			}
+
+			add_filter( 'woocommerce_package_rates', [$this, 'shipping_rates_from_cart_subtotal'], 10, 2 );
+
 		}
 
 		/**
@@ -160,6 +163,36 @@ if ( ! class_exists( 'shipping_extras' ) ) :
 			}
 
 			return self::$instance;
+		}
+
+		const SHIPPING_DISCOUNT_TIERS = array (
+			100 => 0.1,
+			150 => 0.05,
+			200 => 0.025
+		);
+
+		public function shipping_rates_from_cart_subtotal( $rates, $package ) {
+			$subtotal = WC()->cart->subtotal;
+			$discount_rate = 0;
+
+			// find discount tier
+			foreach (self::SHIPPING_DISCOUNT_TIERS as $threshold => $rate) {
+				if ($subtotal <= $threshold) {
+					break;
+				}
+				$discount_rate = $rate;
+			}
+
+			// apply discount to all rates
+			if ( $discount_rate > 0) {
+				array_walk($rates, function(&$rate) use ($discount_rate) {
+					$rate->cost = $rate->cost * (1 - $discount_rate);
+					// tell user they're getting a discount
+					$rate->label = $rate->label . " (" . ( $discount_rate * 100 ) . "% discount! )";
+				});
+			}
+
+			return $rates;
 		}
 	}
 endif;
