@@ -15,9 +15,8 @@ Inspired by [Create Woo Extension](https://github.com/woocommerce/woocommerce/bl
 ### Installation and Build
 
 ```
-npm install
-npm run build
-wp-env start
+$ npm install
+$ npm run build
 ```
 
 ### Testing
@@ -27,6 +26,12 @@ wp-env start
 -   [wp-env](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-env/)
 
 #### Loading sample data
+
+Create sample users, products and shipping methods by running
+```
+$ wp-env start
+$ wp-env run cli bash ./wp-content/plugins/shipping-extras/load_sample.sh
+```
 
 #### Shipping discounts
 
