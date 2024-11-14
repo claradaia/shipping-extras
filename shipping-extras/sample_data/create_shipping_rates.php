@@ -19,14 +19,6 @@ foreach ( $zones as $zone ) {
     }
 }
 
-if ( !$global_zone ) {
-    // create a "global" shipping zone
-    $global_zone = new WC_Shipping_Zone();
-    $global_zone->set_zone_name('Global');
-    $global_zone->set_zone_locations( array('country' => 'any') );
-    $global_zone->save();
-}
-
 // create Standard shipping
 $std_shipping_id = $global_zone->add_shipping_method('flat_rate');
 $std_shipping = new WC_Shipping_Flat_Rate($std_shipping_id);
