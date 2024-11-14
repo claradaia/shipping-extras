@@ -1,11 +1,6 @@
 {
 	"name": "extension/shipping-extras",
-	"description": "WooCommerce plugin",
-	"autoload": {
-		"psr-4": {
-			"ShippingExtras\\": "includes/"
-		}
-	},
+	"description": "Custom shipping discounts for woocommerce",
 	"require-dev": {
 		"phpunit/phpunit": "^9.0",
 		"automattic/jetpack-autoloader": "^2"

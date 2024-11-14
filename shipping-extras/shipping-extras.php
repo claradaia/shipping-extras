@@ -5,7 +5,6 @@
  * Author: Clara Daia
  * Author URI: https://github.com/claradaia
  * Text Domain: shipping-extras
- * Domain Path: /languages
  *
  * License: GNU General Public License v3.0
  * License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -18,12 +17,6 @@ defined( 'ABSPATH' ) || exit;
 if ( ! defined( 'MAIN_PLUGIN_FILE' ) ) {
 	define( 'MAIN_PLUGIN_FILE', __FILE__ );
 }
-
-require_once __DIR__ . '/includes/admin/setup.php';
-
-use ShippingExtras\Admin\Setup;
-
-// phpcs:disable WordPress.Files.FileName
 
 /**
  * WooCommerce fallback notice.
@@ -127,9 +120,6 @@ if ( ! class_exists( 'shipping_extras' ) ) :
 		 * Constructor.
 		 */
 		public function __construct() {
-			if ( is_admin() ) {
-				new Setup();
-			}
 
 			add_filter( 'woocommerce_package_rates', [$this, 'shipping_rates_from_cart_subtotal'], 10, 2 );
 
@@ -224,7 +214,6 @@ add_action( 'plugins_loaded', 'shipping_extras_init', 10 );
  * @since 0.1.0
  */
 function shipping_extras_init() {
-	load_plugin_textdomain( 'shipping_extras', false, plugin_basename( dirname( __FILE__ ) ) . '/languages' );
 
 	if ( ! class_exists( 'WooCommerce' ) ) {
 		add_action( 'admin_notices', 'shipping_extras_missing_wc_notice' );
