@@ -133,6 +133,9 @@ if ( ! class_exists( 'shipping_extras' ) ) :
 
 			add_filter( 'woocommerce_package_rates', [$this, 'shipping_rates_from_cart_subtotal'], 10, 2 );
 
+			 // user roles have priority over subtotal logic, so that if rates are zero no discount message is shown
+			add_filter( 'woocommerce_package_rates', [$this, 'shipping_rates_from_user_role'], 9, 2 );
+
 		}
 
 		/**
@@ -186,9 +189,25 @@ if ( ! class_exists( 'shipping_extras' ) ) :
 			// apply discount to all rates
 			if ( $discount_rate > 0) {
 				array_walk($rates, function(&$rate) use ($discount_rate) {
-					$rate->cost = $rate->cost * (1 - $discount_rate);
-					// tell user they're getting a discount
-					$rate->label = $rate->label . " (" . ( $discount_rate * 100 ) . "% discount! )";
+					if ( $rate->cost > 0 ) {
+						$rate->cost = $rate->cost * (1 - $discount_rate);
+						// tell user they're getting a discount
+						$rate->label = $rate->label . " (" . ( $discount_rate * 100 ) . "% discount! )";
+					}
+				});
+			}
+
+			return $rates;
+		}
+
+		function shipping_rates_from_user_role($rates, $package) {
+			$user = wp_get_current_user();
+
+			if ( in_array( 'VIP_customer', $user->roles ) ) {
+				array_walk($rates, function(&$rate) {
+					$rate->cost = 0;
+					// tell user they're getting it for free
+					$rate->label = $rate->label . " (VIP)";
 				});
 			}
 
